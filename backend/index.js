@@ -5,6 +5,11 @@ const port = process.env.PORT || 3001;
 const cors = require("cors");
 const path = require("path");
 
+const userRouter = require('./routes/signUpSignIn')
+const getConversations = require('./routes/getConversations')
+const getMessages = require('./routes/getMessages')
+const setMessage = require('./routes/setMessage')
+
 app.set('view engine', 'ejs');
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
@@ -28,5 +33,28 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+const {mongoDB} = require('./config/settings');
+const mongoose = require('mongoose');
+
+var options = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    poolSize: 500,
+    bufferMaxEntries: 0
+};
+
+mongoose.connect(mongoDB, options, (err, res) => {
+    if (err) {
+        console.log(err);
+        console.log(`MongoDB Connection Failed`);
+    } else {
+        console.log(`MongoDB Connected`);
+    }
+})
+
+app.use('/user', userRouter )
+app.use('/', getConversations)
+app.use('/', getMessages)
+app.use('/', setMessage)
 
 app.listen(port, () => console.log(`Handshake running on port ${port}`));
