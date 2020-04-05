@@ -21,7 +21,6 @@ router.post("/setMessage", async (req, res)=>{
 
             var new_conversation = new messages({
                 "sender.senderUserName": req.body.senderUserName,
-                
                 "receiver.receiverUserName": req.body.receiverUserName
             })
             new_conversation.save(async (err, result1) => {
