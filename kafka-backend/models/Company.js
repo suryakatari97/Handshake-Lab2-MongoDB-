@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var { JobSchema } = require('./Job');
 
 //schema
 CompanySchema = new Schema({
@@ -30,7 +31,8 @@ CompanySchema = new Schema({
     phoneNumber: {
         type: Number,
         default: ''
-    }
+    },
+    job:[JobSchema]
 });
 
 module.exports = mongoose.model('Company', CompanySchema); 
