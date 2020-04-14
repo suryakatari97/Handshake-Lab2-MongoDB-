@@ -13,7 +13,7 @@ import {
 export const getCompanyJobs = id => dispatch => {
   dispatch(setJobLoading());
   console.log("id", id);
-  axios("/jobs/getCompanyJobDetails", {
+  axios("/getCompanyJobs", {
     method: "get",
     params: { "id": id }
   })
@@ -34,9 +34,9 @@ export const getCompanyJobs = id => dispatch => {
 export const getCompanyEvents = id => dispatch => {
   dispatch(setEventLoading());
   console.log("id getCompanyEvents", id);
-  axios("/events/getEventDetails", {
+  axios("/getEventDetails", {
     method: "get",
-    params: { "user_id": id }
+    params: { "id": id }
   })
     .then(res =>
       dispatch({

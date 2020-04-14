@@ -45,7 +45,7 @@ import { Redirect } from "react-router";
      };
      console.log(newJobPost);
      axios
-       .post("/jobs/addJobPost", newJobPost)
+       .post("/addJobPost", newJobPost)
        .then(res =>
          swal({
            title: "Congratulations!",

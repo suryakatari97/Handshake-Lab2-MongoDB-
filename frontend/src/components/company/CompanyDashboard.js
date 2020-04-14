@@ -16,7 +16,7 @@ import CompanyAddedEvents from "./CompanyAddedEvents";
      console.log("in componentDidMount", this.props);
      //await this.props.getCurrentCompanyProfile(this.props.auth.user.id);
      await this.props.getCompanyJobs(this.props.auth.user.id);
-     await this.props.getCompanyEvents(this.props.auth.user.id);
+    //  await this.props.getCompanyEvents(this.props.auth.user.id);
    }
 
    render() {
@@ -50,7 +50,7 @@ import CompanyAddedEvents from "./CompanyAddedEvents";
              </div>
              <div>
                <CompanyPostedJobs companyjobs={companyjobs} />
-               <CompanyAddedEvents companyevents={companyevents} />
+               {/* <CompanyAddedEvents companyevents={companyevents} /> */}
              </div>
            </div>
          );

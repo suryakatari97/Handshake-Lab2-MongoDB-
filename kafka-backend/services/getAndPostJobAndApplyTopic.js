@@ -8,6 +8,9 @@ exports.getAndPostJobAndApplyService = function getAndPostJobAndApplyService(msg
         case "postJob":
             postJob(msg, callback);
             break;
+        case "getCompanyJobs":
+            getCompanyJobs(msg, callback);
+            break;
     }
 }
 
@@ -47,3 +50,22 @@ exports.getAndPostJobAndApplyService = function getAndPostJobAndApplyService(msg
         return callback(err, null);
     });
 }
+
+async function getCompanyJobs(msg, callback){
+    let err ={};
+    let response={};
+    console.log("in get all companies :" , msg);
+    return await Company.find({_id: msg.body }).select('job')
+        .then((result) => {
+            response.status = 200;
+            response.message = "success" + result;
+            response.data = result;
+            return callback(null, response);
+        })
+        .catch((error) => {
+            err.status = 400;
+            err.message = "error in getting comapny jobs";
+            err.data = error;
+            return callback(err, null);
+        });
+};

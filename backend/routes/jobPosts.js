@@ -25,4 +25,23 @@ router.post("/addJobPost", (req,res)=> {
     });
 });
 
+router.get('/getCompanyJobs', (req,res) => {
+    console.log("Inside getcompanyjobs", req.query.id);
+    kafka.make_request('postJobAndApply_topic', { "path": "getCompanyJobs", "body": req.query.id},function(err,results){
+        if(err){
+            console.log(err);
+            return res.status(err.status).send(err.message);
+        }
+        else if(results.status ===200)
+        {
+            console.log("Results found");
+            return res.status(results.status).send(results.data);
+        }else if(results.status === 400){
+            console.log("No results found");
+            return res.status(results.status).send(results.message);
+        }
+    })
+    
+})
+
 module.exports = router;
