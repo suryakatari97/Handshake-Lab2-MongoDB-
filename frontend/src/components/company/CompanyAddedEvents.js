@@ -23,7 +23,7 @@ import { getStudentsForEvent } from "../../actions/companyActions";
        console.log(companyevents);
        
       // companyevents = Object.values(companyevents);
-       let eventDetails = companyevents.events.map(event => (
+       let eventDetails = companyevents[0].event.map(event => (
          <div>
            <div class="card w-50" id="eventscard">
              <div class="card-body">
@@ -39,7 +39,7 @@ import { getStudentsForEvent } from "../../actions/companyActions";
                  <button
                    type="button"
                    class="btn btn-outline-dark"
-                   onClick={() => this.eventClick(event.event_id)}
+                   onClick={() => this.eventClick(event._id)}
                  >
                    Registered Students
                  </button>

@@ -30,7 +30,10 @@ var JobSchema = new Schema({
   job_category: {
     type: String,
     default: ''
-  }
+  },
+  name:{
+    type:String,
+    }
 });
     
 //module.exports = Job = mongoose.model('Job', JobSchema);

@@ -11,6 +11,9 @@ exports.getAndPostJobAndApplyService = function getAndPostJobAndApplyService(msg
         case "getCompanyJobs":
             getCompanyJobs(msg, callback);
             break;
+        case "getAllJobs":
+            getAllJobs(msg, callback);
+            break;
     }
 }
 
@@ -30,7 +33,8 @@ exports.getAndPostJobAndApplyService = function getAndPostJobAndApplyService(msg
                 location: msg.body.location,
                 salary: msg.body.salary,
                 job_description: msg.body.job_description,
-                job_category: msg.body.job_category
+                job_category: msg.body.job_category,
+                name:msg.body.name
             };
             company.job.push(job);
             company.save()
@@ -55,7 +59,7 @@ async function getCompanyJobs(msg, callback){
     let err ={};
     let response={};
     console.log("in get all companies :" , msg);
-    return await Company.find({_id: msg.body }).select('job')
+    return await Company.find({_id: msg.body}).select('job')
         .then((result) => {
             response.status = 200;
             response.message = "success" + result;
@@ -69,3 +73,22 @@ async function getCompanyJobs(msg, callback){
             return callback(err, null);
         });
 };
+
+async function getAllJobs(msg,callback){
+    let err = {};
+    let response = {};
+    console.log("in get all companies :", msg);
+    return await Company.find({}).select('job')
+        .then((result) => {
+            response.status = 200;
+            response.message = "success" + result;
+            response.data = result;
+            return callback(null, response);
+        })
+        .catch((error) => {
+            err.status = 400;
+            err.message = "error in getting comapny jobs";
+            err.data = error;
+            return callback(err, null);
+        });
+}

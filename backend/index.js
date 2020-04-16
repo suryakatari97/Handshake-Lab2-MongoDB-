@@ -11,6 +11,7 @@ const getMessages = require('./routes/getMessages')
 const setMessage = require('./routes/setMessage')
 const findusers = require('./routes/findUsers');
 const jobPosts = require('./routes/jobPosts');
+const eventPosts = require('./routes/eventPosts');
 
 app.set('view engine', 'ejs');
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
@@ -60,5 +61,6 @@ app.use('/', getMessages)
 app.use('/', setMessage)
 app.use('/', findusers)
 app.use('/', jobPosts)
+app.use('/', eventPosts)
 
 app.listen(port, () => console.log(`Handshake running on port ${port}`));

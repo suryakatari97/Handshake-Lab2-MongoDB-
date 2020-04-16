@@ -30,13 +30,14 @@ class JobFilter extends Component {
     console.log("in componentDidMount");
 
     //List of all jobs posted
-    await axios("/jobs/getJobDetails", {
+    await axios("/getAllJobs", {
       method: "get",
       config: { headers: { "Content-Type": "application/json" } }
     })
       .then(res => {
-        const { jobs } = res.data;
-        this.setState({ jobs: jobs });
+        console.log("In getalljobs :" , res.data[0].job);
+        const { job } = res.data[0];
+        this.setState({ jobs: job });
         //console.log(jobs);
       })
       .catch(error => console.log(error.response.data));
@@ -150,7 +151,7 @@ class JobFilter extends Component {
           <div className="card">
             <div className="card-body">
               <div className="row">
-                <h5 className="card-title col-7">{job.job_title}</h5>
+                <h5 className="card-title col-7">{job.title}</h5>
                 {/* <div className="col-6"></div> */}
                 <div className="col-3">
                   <button
@@ -164,7 +165,7 @@ class JobFilter extends Component {
               </div>
 
               <p className="card-text">
-                <strong>{job.company_name}</strong>,{" "}
+                <strong>{job.name}</strong>,{" "}
                 <strong>{job.location}</strong>
               </p>
               <p className="card-text">
@@ -174,7 +175,7 @@ class JobFilter extends Component {
                 <strong>Posted on : </strong>
                 <Moment format="YYYY/MM/DD">{job.posting_date}</Moment>
                 <strong> Application Deadline : </strong>
-                <Moment format="YYYY/MM/DD">{job.app_deadline}</Moment>
+                <Moment format="YYYY/MM/DD">{job.application_deadline}</Moment>
               </p>
 
               <p className="card-text">
@@ -279,7 +280,7 @@ class JobFilter extends Component {
               </ModalHeader>
               <ModalBody className="modal-body">
                 <div className="form-group">
-                  <h4>Title : {this.state.job.job_title}</h4>
+                  <h4>Title : {this.state.job.title}</h4>
                 </div>
                 <div className="form-group">
                   <h4>Job Description: {this.state.job.job_description}</h4>
@@ -291,7 +292,7 @@ class JobFilter extends Component {
                   <h4>
                     Application deadline :
                     <Moment format="YYYY/MM/DD">
-                      {this.state.job.app_deadline}
+                      {this.state.job.application_deadline}
                     </Moment>
                   </h4>
                 </div>

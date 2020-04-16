@@ -1,6 +1,7 @@
 var connection = new require('./kafka/Connection');
 var signupLoginTopics = require('./services/signupLoginTopics.js');
 var getAndPostJobAndApplyTopic = require('./services/getAndPostJobAndApplyTopic');
+var getAndPostEventTopic = require('./services/getAndPostEventTopic')
 const { mongoDB } = require('./config/settings');
 const mongoose = require('mongoose');
 
@@ -44,6 +45,11 @@ function handleTopicRequest(topic_name, fname) {
                     return;
                 });
                 break;
+            case 'addEventAndRegister_topic':
+                fname.getAndPostEventService(data.data, function (err, res){
+                    response(data, res, producer);
+                    return;
+                });
         }
     });
 }
@@ -72,3 +78,4 @@ function response(data, res, producer) {
 //handleTopicRequest("login_topic",login);
 handleTopicRequest("signupLogin_topic", signupLoginTopics);
 handleTopicRequest("postJobAndApply_topic", getAndPostJobAndApplyTopic);
+handleTopicRequest("addEventAndRegister_topic", getAndPostEventTopic);

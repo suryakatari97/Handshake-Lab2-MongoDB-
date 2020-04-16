@@ -34,7 +34,7 @@ export const getCompanyJobs = id => dispatch => {
 export const getCompanyEvents = id => dispatch => {
   dispatch(setEventLoading());
   console.log("id getCompanyEvents", id);
-  axios("/getEventDetails", {
+  axios("/getCompanyEvents", {
     method: "get",
     params: { "id": id }
   })

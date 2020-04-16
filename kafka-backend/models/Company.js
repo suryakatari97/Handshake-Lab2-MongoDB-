@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var { JobSchema } = require('./Job');
+var {EventSchema} = require('./Event');
 
 //schema
 CompanySchema = new Schema({
@@ -32,7 +33,8 @@ CompanySchema = new Schema({
         type: Number,
         default: ''
     },
-    job:[JobSchema]
+    job:[JobSchema],
+    event:[EventSchema]
 });
 
 module.exports = mongoose.model('Company', CompanySchema); 

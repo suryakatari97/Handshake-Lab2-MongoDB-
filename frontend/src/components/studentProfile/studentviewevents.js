@@ -41,12 +41,12 @@ class studentviewevents extends Component {
   };
   async componentDidMount() {
     const user_id = getID();
-    axios("/events/viewevents", {
+    axios("/viewallevents", {
       method: "get",
       params: { user_id: user_id }
     }).then(response => {
       this.setState({
-        events: this.state.events.concat(response.data.events) //events[0]
+        events: this.state.events.concat(response.data[0].event) //events[0]
       });
       console.log(this.state.events);
     });
@@ -66,7 +66,7 @@ class studentviewevents extends Component {
     };
     console.log(registerevent);
     axios
-      .post("/events/eventregister", registerevent)
+      .post("/eventregister", registerevent)
       .then(res =>
         swal({
           title: "Congratulations!",
@@ -114,14 +114,14 @@ class studentviewevents extends Component {
                   <button
                     type="button"
                     class="btn btn-primary"
-                    onClick={() => this.register(viewevent.event_id)}
+                    onClick={() => this.register(viewevent._id)}
                   >
                     Register
                   </button>
                 </div>
               </div>
               <p class="card-text" id="eventtext">
-                Company Name: {viewevent.company_name}
+                Company Name: {viewevent.name}
               </p>
               <p class="card-text" id="eventtext">
                 eligibility: {viewevent.eligibility}
