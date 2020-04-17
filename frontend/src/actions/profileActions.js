@@ -16,15 +16,17 @@ export const getCurrentProfile = (id) => dispatch => {
     console.log("IN GET STUDENT PROFILE :", id);
     
     dispatch(setProfileLoading());    
-    axios('/student/studentdetails',{
+  axios('/getStudentProfile',{
         method: 'get',
         params:{"id" : id}
     })
     .then(res => 
+      
         dispatch({
             type : GET_PROFILE,
             payload: res.data
         })
+        
         )
         .catch(err =>
              dispatch({
@@ -32,12 +34,13 @@ export const getCurrentProfile = (id) => dispatch => {
             payload: {}//if there is no profile,this will take us to create profile
         })
         );
+  
 };
 
 export const createProfile = (profileData, history) => dispatch => {
     console.log(profileData);
     
-    axios.post('/student/studentdetails', profileData)
+  axios.post('/updateStudentBasic', profileData)
     .then(res => history.push('/viewprofile'))
     .catch(err =>
         dispatch({
@@ -48,7 +51,7 @@ export const createProfile = (profileData, history) => dispatch => {
 
 export const addEducationRecord = (educationData, history) => dispatch => {
   axios
-    .post("/student/studentEducation", educationData)
+    .post("/updateStudentEducation", educationData)
     .then(res => history.push("/viewprofile"))
     .catch(err =>
       dispatch({
@@ -60,7 +63,7 @@ export const addEducationRecord = (educationData, history) => dispatch => {
 
 export const addExperienceRecord = (experienceData, history) => dispatch => {
   axios
-    .post("/student/studentExperience", experienceData)
+    .post("/updateStudentWorkExp", experienceData)
     .then(res => history.push("/viewprofile"))
     .catch(err =>
       dispatch({
@@ -72,7 +75,7 @@ export const addExperienceRecord = (experienceData, history) => dispatch => {
 export const getStudentEducation = id => dispatch => {
   dispatch(setEduProfileLoading());
   console.log("id", id);
-  axios("/student/studentEducation", {
+  axios("/getStudentProfile", {
     method: "get",
     params: { "id": id }
   })
@@ -93,7 +96,7 @@ export const getStudentEducation = id => dispatch => {
 export const getStudentExperience = id => dispatch => {
   dispatch(setExpProfileLoading());
   console.log("id", id);
-  axios("/student/studentExperience", {
+  axios("/getStudentProfile", {
     method: "get",
     params: { "id": id }
   })

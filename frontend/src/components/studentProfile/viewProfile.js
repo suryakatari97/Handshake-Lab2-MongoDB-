@@ -15,16 +15,12 @@ import rootURL from "../../config/settings"
 
 
 class viewProfile extends Component {
-  async componentDidMount() {
-    
-    if (this.props.auth) {
-      this.props.getCurrentProfile(this.props.auth.user.id);
-      this.props.getStudentEducation(this.props.auth.user.id);
-      this.props.getStudentExperience(this.props.auth.user.id);
-    }
+   async componentWillMount() {
+     console.log(this.props)
+      await this.props.getCurrentProfile(this.props.auth.user.id);
+      // await this.props.getStudentEducation(this.props.auth.user.id);
+      // await this.props.getStudentExperience(this.props.auth.user.id);
   }
-
-
 
   render() {
     //to make sure that profile state is not equal to NULL before we render
@@ -33,7 +29,7 @@ class viewProfile extends Component {
     const { profile = [], loading } = this.props.profile;
     const { education = [], eduLoading } = this.props.education;
     const { experience = [], expLoading } = this.props.experience;
-
+    console.log(this.props)
     console.log("profile :");
     console.log(profile);
     let viewProfileContent;
@@ -48,6 +44,7 @@ class viewProfile extends Component {
       expLoading
     ) {
       //viewProfileContent = <Spinner />;
+      console.log("hello")
       viewProfileContent = (
         <Link to="/studentbasic" className="btn btn-lg btn-info">
           Create Profile
@@ -63,11 +60,11 @@ class viewProfile extends Component {
           id="image"
         ></img>
       );
-      if (profile.result[0].student_profileImage) {
+      if (profile.user.img) {
         console.log("hi");
         profileImageData = (
           <img
-            src={rootURL + "/student/download-file/" + profile.result[0].student_profileImage}
+            src={rootURL + "/student/download-file/" + profile.user.img}
             class="rounded mx-auto d-block"
             alt="..."
             id="image"
@@ -79,16 +76,16 @@ class viewProfile extends Component {
       viewProfileContent = (
         <div>
           <p className="lead text-muted">
-            Welcome {profile.result[0].first_name}
+            Welcome {profile.user.name}
           </p>
           <div className="card w-70">
             <div className="card-body">
               {profileImageData}
-              <p className="lead text-muted">{profile.result[0].first_name}</p>
+              <p className="lead text-muted">{profile.user.name}</p>
               <p className="lead text-muted">
-                {education.education[0].college_name}
+                {profile.education[0].school}
               </p>
-              <p className="lead text-muted">{profile.result[0].skill_set}</p>
+              <p className="lead text-muted">{profile.skill_set}</p>
               <Link to="/editstudentbasic" className="btn btn-primary">
                 Edit Profile
               </Link>
@@ -122,9 +119,9 @@ class viewProfile extends Component {
                 </div>
               </div>
               <div>
-                <StudentEducation education={education} />
+                <StudentEducation education={profile} />
                 <div id="edu"></div>
-                <StudentExperience experience={experience} />
+                <StudentExperience experience={profile} />
               </div>
             </div>
           </div>

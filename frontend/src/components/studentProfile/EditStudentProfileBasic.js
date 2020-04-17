@@ -37,30 +37,23 @@ class EditStudentProfileBasic extends Component {
     console.log("in edit component : ", this.props.auth.user.id);
 
     this.props.getCurrentProfile(this.props.auth.user.id);
-
-    // console.log("got profile", this.props.profile);
-    // console.log("Profile image name", this.props.profile.student_profileImage);
-    // this.setState({
-    //   profileImagePreview:
-    //     rootURL +
-    //     "/student/download-file/" +
-    //     this.props.profile.student_profileImage
-    // });
   }
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+    
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
     if (nextProps.profile.profile) {
-      console.log(nextProps.profile.profile.result[0]);
+      console.log(nextProps.profile.profile);
 
-      const profile = nextProps.profile.profile.result[0];
+      const profile = nextProps.profile.profile;
       console.log("componentreceiveprops :", profile);
-      profile.first_name = !isFieldEmpty(profile.first_name)
-        ? profile.first_name
+      profile.fname = !isFieldEmpty(profile.fname)
+        ? profile.fname
         : "";
-      profile.last_name = !isFieldEmpty(profile.last_name)
-        ? profile.last_name
+      profile.lname = !isFieldEmpty(profile.lname)
+        ? profile.lname
         : "";
       profile.dob = !isFieldEmpty(profile.dob) ? profile.dob : "";
       profile.city = !isFieldEmpty(profile.city) ? profile.city : "";
@@ -81,8 +74,8 @@ class EditStudentProfileBasic extends Component {
 
       this.setState({
         handle: profile.handle,
-        fname: profile.first_name,
-        lname: profile.last_name,
+        fname: profile.fname,
+        lname: profile.lname,
         dob: profile.dob,
         city: profile.city,
         state: profile.state,
@@ -166,7 +159,6 @@ class EditStudentProfileBasic extends Component {
       ></img>
     );
     if (this.state.profileImagePreview) {
-      console.log("hi");
       profileImageData = (
         <img
           src={this.state.profileImagePreview}

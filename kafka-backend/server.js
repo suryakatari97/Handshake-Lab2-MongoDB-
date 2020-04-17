@@ -2,6 +2,7 @@ var connection = new require('./kafka/Connection');
 var signupLoginTopics = require('./services/signupLoginTopics.js');
 var getAndPostJobAndApplyTopic = require('./services/getAndPostJobAndApplyTopic');
 var getAndPostEventTopic = require('./services/getAndPostEventTopic')
+var studentProfileTopics = require('./services/studentProfileTopics')
 const { mongoDB } = require('./config/settings');
 const mongoose = require('mongoose');
 
@@ -50,6 +51,11 @@ function handleTopicRequest(topic_name, fname) {
                     response(data, res, producer);
                     return;
                 });
+            case 'studentProfile_topic':
+                fname.studentProfileService(data.data, function (err, res) {
+                    response(data, res, producer);
+                    return;
+                });
         }
     });
 }
@@ -79,3 +85,4 @@ function response(data, res, producer) {
 handleTopicRequest("signupLogin_topic", signupLoginTopics);
 handleTopicRequest("postJobAndApply_topic", getAndPostJobAndApplyTopic);
 handleTopicRequest("addEventAndRegister_topic", getAndPostEventTopic);
+handleTopicRequest("studentProfile_topic", studentProfileTopics);

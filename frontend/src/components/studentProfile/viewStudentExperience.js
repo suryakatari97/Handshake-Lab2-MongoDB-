@@ -6,31 +6,33 @@ import { isFieldEmpty } from "../auth/HelperApis";
 
  class viewStudentExperience extends Component {
     render() {
-        var { experience } = this.props;
+var expItems = null;
+      if(this.props.experience!=null){
+        var { experience } = this.props.experience;
         experience = Object.values(experience);
         console.log(experience);
         
-        const expItems = experience.map((experience,i) => (
+         expItems = experience.map((experience,i) => (
           <div className="card w-100">
             <div className="card-body">
               <h5 className="card-title">Experience</h5>
               <p class="card-text" id="eventtext">
-                Company Name: {experience[i].company_name}
+                Company Name: {experience.company}
               </p>
               <p class="card-text" id="eventtext">
-                Title: {experience[i].title}
+                Title: {experience.title}
               </p>
               <p class="card-text" id="eventtext">
-                Start Date: {experience[i].start_date}
+                Start Date: {experience.from}
               </p>
               <p class="card-text" id="eventtext">
-                End Date: {experience[i].end_date}
+                End Date: {experience.to}
               </p>
               <p class="card-text" id="eventtext">
-                Location: {experience[i].location}
+                Location: {experience.location}
               </p>
               <p class="card-text" id="eventtext">
-                Work Description: {experience[i].work_desc}
+                Work Description: {experience.description}
               </p>
               <a href="/studentExperience" className="btn btn-primary">
                 Edit
@@ -38,6 +40,7 @@ import { isFieldEmpty } from "../auth/HelperApis";
             </div>
           </div>
         ));
+      }
         return (
           <div>
             {/* {expItems.length > 0 ? (

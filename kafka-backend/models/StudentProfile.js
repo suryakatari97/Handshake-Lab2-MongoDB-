@@ -1,11 +1,18 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+
 // Create Schema
 const StudentProfileSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref:'Student'
+  },
+  fname:{
+    type: String
+  },
+  lname: {
+    type: String
   },
   city: {
     type: String
@@ -88,6 +95,9 @@ const StudentProfileSchema = new Schema({
         default: false
       },
       description: {
+        type: String
+      },
+      cgpa: {
         type: String
       }
     }

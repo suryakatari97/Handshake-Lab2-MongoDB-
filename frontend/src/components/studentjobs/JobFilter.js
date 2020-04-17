@@ -5,12 +5,13 @@ import { Modal, ModalHeader, ModalBody } from "reactstrap";
 import { getID } from "../auth/HelperApis";
 import swal from "sweetalert";
 import Nav from "../studentProfile/Nav";
+import './paginationStyles.css'
 
 class JobFilter extends Component {
   constructor() {
     super();
     this.state = {
-      jobs: [],
+      jobs: "",
       keyword: "",
       location: "",
       modal: false,
@@ -19,13 +20,14 @@ class JobFilter extends Component {
       job: null,
       view: false,
       apply: false,
-      errors: {}
+      errors: {},
+      pageNumber: 0
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     axios.defaults.withCredentials = true;
     console.log("in componentDidMount");
 
@@ -35,18 +37,39 @@ class JobFilter extends Component {
       config: { headers: { "Content-Type": "application/json" } }
     })
       .then(res => {
-        console.log("In getalljobs :" , res.data[0].job);
-        const { job } = res.data[0];
-        this.setState({ jobs: job });
+        console.log("In getalljobs :", res.data[0].job);
+
+        let ItemByPages = res.data[0].job
+
+        console.log(ItemByPages.length);
+
+        let totalItem = ItemByPages.length
+        let pages = (totalItem % 3) == 0 ? totalItem / 3 : Math.floor(totalItem / 3) + 1
+        console.log(pages);
+
+        let pageItem = new Array(pages)
+
+        for (let i = 0; i < pageItem.length; i++) {
+          pageItem[i] = new Array(3);
+        }
+        let h = 0
+        for (let i = 0; i < pages; i++) {
+          for (let j = 0; j < 3; j++) {
+            pageItem[i][j] = ItemByPages[h++];
+          }
+        }
+        console.log(pageItem);
+
+        // const { job } = pageItem;
+        this.setState({ jobs: pageItem });
         //console.log(jobs);
-      })
-      .catch(error => console.log(error.response.data));
+      }).catch(error => console.log(error.response));
   }
 
   //handle upload for resume
   handleUpload = async event => {
     console.log(event.target.files[0]);
-   await this.setState({ file: event.target.files[0] });
+    await this.setState({ file: event.target.files[0] });
     console.log(this.state.file);
   };
 
@@ -54,21 +77,21 @@ class JobFilter extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-     async onSubmit(e) {
-       e.preventDefault();
-       const jobSearch = {
-         keyword: this.state.keyword,
-         location: this.state.location
-       };
-       console.log(jobSearch);
+  async onSubmit(e) {
+    e.preventDefault();
+    const jobSearch = {
+      keyword: this.state.keyword,
+      location: this.state.location
+    };
+    console.log(jobSearch);
 
-       //List of all filtered posted
-       await axios.post("/jobs/getSearchedJobDetails", jobSearch).then(res => {
-         const { jobs } = res.data;
-         this.setState({ jobs: jobs });
-         console.log(jobs);
-       });
-     }
+    //List of all filtered posted
+    await axios.post("/jobs/getSearchedJobDetails", jobSearch).then(res => {
+      const { jobs } = res.data;
+      this.setState({ jobs: jobs });
+      console.log(jobs);
+    });
+  }
 
   showModal = () => {//view
     //console.log("hello");
@@ -131,7 +154,16 @@ class JobFilter extends Component {
         }
       }
       )
-  }};
+    }
+  };
+
+
+  makeRequestWithPage = (number) => {
+    console.log("in requests with page", number);
+    this.setState({
+      pageNumber: number
+    })
+  }
 
   render() {
     const closeBtn = (
@@ -144,92 +176,196 @@ class JobFilter extends Component {
         &times;
       </button>
     );
+    let pageNumbers = []
+    let route;
+    console.log("route", this.state.jobs);
+   
+    if (this.state.jobs) {
+      route = this.state.jobs;
 
-    let jobDetails = this.state.jobs.map(job => {
-      return (
-        <div className="col w-75" id="eventscard">
-          <div className="card">
-            <div className="card-body">
-              <div className="row">
-                <h5 className="card-title col-7">{job.title}</h5>
-                {/* <div className="col-6"></div> */}
-                <div className="col-3">
+      let k = route.length
+      let i = 0;
+      while (k > 0) {
+        pageNumbers.push(i)
+        i++;
+        k--;
+      }
+      console.log(pageNumbers);
+    }
+
+
+
+
+
+
+    let renderPageNumbers = ""
+    let jobDetails;
+    console.log("route", route);
+    
+    if (route) {
+      jobDetails = route[this.state.pageNumber].map((job, index) => {
+
+        if (job) {
+          // let quant = JSON.parse(this.state.itemQuantity)
+
+          return (
+            <div className="col w-75" id="eventscard">
+              <div className="card">
+                <div className="card-body">
+                  <div className="row">
+                    <h5 className="card-title col-7">{job.title}</h5>
+                    {/* <div className="col-6"></div> */}
+                    <div className="col-3">
+                      <button
+                        type="button"
+                        className="btn btn-outline-success"
+                        onClick={() => this.showModala(job)} //changed this.showmodal
+                      >
+                        View Job Details
+                  </button>
+                    </div>
+                  </div>
+
+                  <p className="card-text">
+                    <strong>{job.name}</strong>,{" "}
+                    <strong>{job.location}</strong>
+                  </p>
+                  <p className="card-text">
+                    <strong>Salary:</strong> {job.salary}
+                  </p>
+                  <p className="card-text">
+                    <strong>Posted on : </strong>
+                    <Moment format="YYYY/MM/DD">{job.posting_date}</Moment>
+                    <strong> Application Deadline : </strong>
+                    <Moment format="YYYY/MM/DD">{job.application_deadline}</Moment>
+                  </p>
+                  <p className="card-text">
+                    <strong>Job Details : </strong>
+                    {job.job_description}
+                  </p>
+                  <div className="col-10"></div>
                   <button
                     type="button"
-                    className="btn btn-outline-success"
-                    onClick={() => this.showModala(job)} //changed this.showmodal
+                    className="btn btn-primary"
+                    onClick={() => this.showModal11(job)} //changed this.showmodal1
                   >
-                    View Job Details
-                  </button>
+                    Apply
+              </button>
                 </div>
               </div>
-
-              <p className="card-text">
-                <strong>{job.name}</strong>,{" "}
-                <strong>{job.location}</strong>
-              </p>
-              <p className="card-text">
-                <strong>Salary:</strong> {job.salary}
-              </p>
-              <p className="card-text">
-                <strong>Posted on : </strong>
-                <Moment format="YYYY/MM/DD">{job.posting_date}</Moment>
-                <strong> Application Deadline : </strong>
-                <Moment format="YYYY/MM/DD">{job.application_deadline}</Moment>
-              </p>
-
-              <p className="card-text">
-                <strong>Job Details : </strong>
-                {job.job_description}
-              </p>
-              <div className="col-10"></div>
-              {/* <a
-                 href="/studentApplyJob"
-                 className="btn btn-primary"
-                 onClick={this.apply(job.job_id)}
-               >
-                 Apply
-               </a> */}
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => this.showModal11(job)} //changed this.showmodal1
-              >
-                Apply
-              </button>
-              {/* <form onSubmit={() => this.uploadFile(job.job_id)}>
-                <div className="form-group row">
-                  <label htmlFor="url" className="col-sm-2 col-form-label">
-                    Upload Resume:
-                  </label>
-                  <div className="col-sm-5">
-                    <input
-                      label="upload file"
-                      type="file"
-                      required
-                      onChange={this.handleUpload}
-                    />
-                  </div>
-                </div>
-                <div className="form-group row text-center">
-                  <div className="col-sm-5">
-                    <button
-                      type="submit"
-                      className="btn btn-primary align-center"
-                      style={{ marginTop: "2em" }}
-                    >
-                      Upload
-                    </button>
-                  </div>
-                </div>
-              </form> */}
-              {/* MODAL CODE  FOR RESUME UPLOADING  */}
             </div>
-          </div>
-        </div>
-        //  </div>
-      );
-    });
+          )
+        }
+
+      })
+
+      let unknown;
+
+      if (pageNumbers.length > 1) {
+        renderPageNumbers = pageNumbers.map(number => {
+          let classes = this.state.pageNumber === number ? 'active' : '';
+
+          return (
+            <span key={number} className={classes} onClick={() => this.makeRequestWithPage(number)}>{number + 1}</span>
+          );
+        });
+      }
+    }
+
+
+
+
+
+
+
+
+
+
+    // let jobDetails = this.state.jobs.map(job => {
+    //   return (
+    //     <div className="col w-75" id="eventscard">
+    //       <div className="card">
+    //         <div className="card-body">
+    //           <div className="row">
+    //             <h5 className="card-title col-7">{job.title}</h5>
+    //             {/* <div className="col-6"></div> */}
+    //             <div className="col-3">
+    //               <button
+    //                 type="button"
+    //                 className="btn btn-outline-success"
+    //                 onClick={() => this.showModala(job)} //changed this.showmodal
+    //               >
+    //                 View Job Details
+    //               </button>
+    //             </div>
+    //           </div>
+
+    //           <p className="card-text">
+    //             <strong>{job.name}</strong>,{" "}
+    //             <strong>{job.location}</strong>
+    //           </p>
+    //           <p className="card-text">
+    //             <strong>Salary:</strong> {job.salary}
+    //           </p>
+    //           <p className="card-text">
+    //             <strong>Posted on : </strong>
+    //             <Moment format="YYYY/MM/DD">{job.posting_date}</Moment>
+    //             <strong> Application Deadline : </strong>
+    //             <Moment format="YYYY/MM/DD">{job.application_deadline}</Moment>
+    //           </p>
+
+    //           <p className="card-text">
+    //             <strong>Job Details : </strong>
+    //             {job.job_description}
+    //           </p>
+    //           <div className="col-10"></div>
+    //           {/* <a
+    //              href="/studentApplyJob"
+    //              className="btn btn-primary"
+    //              onClick={this.apply(job.job_id)}
+    //            >
+    //              Apply
+    //            </a> */}
+    //           <button
+    //             type="button"
+    //             className="btn btn-primary"
+    //             onClick={() => this.showModal11(job)} //changed this.showmodal1
+    //           >
+    //             Apply
+    //           </button>
+    //           {/* <form onSubmit={() => this.uploadFile(job.job_id)}>
+    //             <div className="form-group row">
+    //               <label htmlFor="url" className="col-sm-2 col-form-label">
+    //                 Upload Resume:
+    //               </label>
+    //               <div className="col-sm-5">
+    //                 <input
+    //                   label="upload file"
+    //                   type="file"
+    //                   required
+    //                   onChange={this.handleUpload}
+    //                 />
+    //               </div>
+    //             </div>
+    //             <div className="form-group row text-center">
+    //               <div className="col-sm-5">
+    //                 <button
+    //                   type="submit"
+    //                   className="btn btn-primary align-center"
+    //                   style={{ marginTop: "2em" }}
+    //                 >
+    //                   Upload
+    //                 </button>
+    //               </div>
+    //             </div>
+    //           </form> */}
+    //           {/* MODAL CODE  FOR RESUME UPLOADING  */}
+    //         </div>
+    //       </div>
+    //     </div>
+    //     //  </div>
+    //   );
+    // });
 
     return (
       <div className="container">
@@ -299,7 +435,7 @@ class JobFilter extends Component {
               </ModalBody>
             </Modal>
           ) : // {/* END OF VIEW JOB DETAILS MODAL */}
-          null}
+            null}
           {this.state.apply != false ? (
             //resume uploading
             <Modal
@@ -343,6 +479,9 @@ class JobFilter extends Component {
               </ModalBody>
             </Modal>
           ) : null}
+        </div>
+        <div className='pagination'>
+          {renderPageNumbers}
         </div>
       </div>
     );
