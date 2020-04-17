@@ -5,7 +5,8 @@ import { Modal, ModalHeader, ModalBody } from "reactstrap";
 import { getID } from "../auth/HelperApis";
 import swal from "sweetalert";
 import Nav from "../studentProfile/Nav";
-import './paginationStyles.css'
+import './paginationStyles.css';
+import { Link } from "react-router-dom";
 
 class JobFilter extends Component {
   constructor() {
@@ -465,13 +466,19 @@ class JobFilter extends Component {
                     </div>
                     <div className="form-group row text-center">
                       <div className="col-sm-5">
-                        <button
+                        {/* <button
                           type="submit"
                           className="btn btn-primary align-center"
                           style={{ marginTop: "2em" }}
                         >
                           Upload
-                        </button>
+                        </button> */}
+                        <Link
+                          to="/studentDashboard"
+                          className="btn btn-primary align-center"
+                        >
+                          Upload
+                        </Link>
                       </div>
                     </div>
                   </form>

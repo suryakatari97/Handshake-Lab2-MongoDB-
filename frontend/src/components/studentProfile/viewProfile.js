@@ -76,12 +76,12 @@ class viewProfile extends Component {
       viewProfileContent = (
         <div>
           <p className="lead text-muted">
-            Welcome {profile.user.name}
+            Welcome {profile.fname}
           </p>
           <div className="card w-70">
             <div className="card-body">
               {profileImageData}
-              <p className="lead text-muted">{profile.user.name}</p>
+      <p className="lead text-muted">{profile.fname}{"  "}{profile.lname}</p>
               <p className="lead text-muted">
                 {profile.education[0].school}
               </p>
@@ -113,7 +113,7 @@ class viewProfile extends Component {
                   </h5>
                   <br />
                   <h6 className="card-title" id="eventtext">
-                    Searching for co-op opportunity for either Spring or fall of
+                    Searching for Internship/co-op opportunity for either Summer or fall of
                     2020
                   </h6>
                 </div>

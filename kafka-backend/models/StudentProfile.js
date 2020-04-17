@@ -54,15 +54,11 @@ const StudentProfileSchema = new Schema({
         type: String
       },
       from: {
-        type: Date,
+        type: String,
         required: true
       },
       to: {
-        type: Date
-      },
-      current: {
-        type: Boolean,
-        default: false
+        type: String
       },
       description: {
         type: String
@@ -84,17 +80,16 @@ const StudentProfileSchema = new Schema({
         required: true
       },
       from: {
-        type: Date,
+        type: String,
         required: true
       },
       to: {
-        type: Date
-      },
-      current: {
-        type: Boolean,
-        default: false
+        type: String
       },
       description: {
+        type: String
+      },
+      location: {
         type: String
       },
       cgpa: {

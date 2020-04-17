@@ -80,7 +80,6 @@ function updateStudentWorkExp(msg, callback) {
             location: msg.body.location,
             from: msg.body.from,
             to: msg.body.to,
-            current: msg.body.current,
             description: msg.body.description
         };
 
@@ -105,7 +104,6 @@ function updateStudentEducation(msg, callback) {
             education_major: msg.body.education_major,
             from: msg.body.from,
             to: msg.body.to,
-            current: msg.body.current,
             cgpa: msg.body.cgpa,
         };
 

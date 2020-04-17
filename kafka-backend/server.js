@@ -51,11 +51,19 @@ function handleTopicRequest(topic_name, fname) {
                     response(data, res, producer);
                     return;
                 });
+                break;
             case 'studentProfile_topic':
                 fname.studentProfileService(data.data, function (err, res) {
                     response(data, res, producer);
                     return;
                 });
+                break;
+            // case 'companyProfile_topic':
+            //     fname.companyProfileService(data.data, function (err, res) {
+            //         response(data, res, producer);
+            //         return;
+            //     });
+            //     break;
         }
     });
 }
@@ -86,3 +94,4 @@ handleTopicRequest("signupLogin_topic", signupLoginTopics);
 handleTopicRequest("postJobAndApply_topic", getAndPostJobAndApplyTopic);
 handleTopicRequest("addEventAndRegister_topic", getAndPostEventTopic);
 handleTopicRequest("studentProfile_topic", studentProfileTopics);
+// handleTopicRequest("companyProfile_topic", companyProfileTopics);
