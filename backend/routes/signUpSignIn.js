@@ -34,14 +34,7 @@ router.post("/signUpStudent", async function (req, res) {
 });
 
 router.post("/signUpCompany", async function (req, res) {
-    // console.log(req.body);
-    // const { errors, isValid } = validate.validateRegisterCompanyInput(req.body);
-    // console.log(isValid);
-    // console.log(errors);
-    // if (!isValid) {
-    //     return res.status(400).json(errors);
-    // }
-
+    
     console.log("In signup company route");
     console.log(req.body);
     kafka.make_request("signupLogin_topic", { "path": "companySignup", "body": req.body }, function (err, results) {
